@@ -21,8 +21,8 @@ phases:
       - cd cicd-proj
       - echo "Building Docker Image"
       - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
-      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/amarbvn-cicd-proj-app:latest" .
-      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/amarbvn-cicd-proj-app:latest"
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/amarbvn-cicd-proj:latest" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/amarbvn-cicd-proj:latest"
       - echo "Build completed."
 
   post_build:
