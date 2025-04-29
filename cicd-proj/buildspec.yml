@@ -1,0 +1,31 @@
+version: 0.2
+
+env:
+  parameter-store:
+    DOCKER_REGISTRY_USERNAME: /myapp/docker-credentials/username
+    DOCKER_REGISTRY_PASSWORD: /myapp/docker-credentials/password
+    DOCKER_REGISTRY_URL: /myapp/docker-registry/url
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+
+  pre_build:
+    commands:
+      - echo "Installing dependencies..."
+      - pip install -r cicd-proj/requirements.txt
+
+  build:
+    commands:
+      - cd cicd-proj
+      - echo "Building Docker Image"
+      - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
+      - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/amarbvn-cicd-proj-app:latest" .
+      - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/amarbvn-cicd-proj-app:latest"
+      - echo "Build completed."
+
+  post_build:
+    commands:
+      - echo "Post-build tasks..."
+      - echo "Build completed at $(date)"
