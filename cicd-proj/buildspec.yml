@@ -13,16 +13,18 @@ phases:
 
   pre_build:
     commands:
+      - echo "Logging into Docker Hub..."
+      - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin
       - echo "Installing dependencies..."
       - pip install -r cicd-proj/requirements.txt
 
   build:
     commands:
       - cd cicd-proj
-      - echo "Building Docker Image"
-      - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
-      - docker build -t "$DOCKER_REGISTRY_URL/amarbvn-cicd-proj:latest" .
-      - docker push "$DOCKER_REGISTRY_URL/amarbvn-cicd-proj:latest"
+      - echo "Building Docker Image from AWS Console"
+      #- echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
+      - docker build -t "$DOCKER_REGISTRY_USERNAME/amarbvn-cicd-proj:latest" .
+      - docker push "$DOCKER_REGISTRY_USERNAME/amarbvn-cicd-proj:latest"
       - echo "Build completed."
 
   post_build:
